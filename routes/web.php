@@ -29,4 +29,12 @@ Route::post(uri: '/about', action: function() {
 });
 
 
+Route::get(uri: 'tasks', action: function() {
+    return view(view: 'tasks');
+});
 
+Route::post(uri: 'create', action: function(): string{
+    $task_name = $_POST['name'];
+    DB::table(table: 'tasks')->insert(values: ['name' => $task_name]);
+    return view(view: 'tasks') ;
+});
