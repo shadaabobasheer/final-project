@@ -3,81 +3,81 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;  // إضافة الاستدعاء لتشفير كلمة المرور
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    // دالة عرض المستخدمين
-    public function index() {
-        $users = DB::table('users')->get(); // جلب المستخدمين من قاعدة البيانات
-        return view('users', compact('users')); // إرجاع الواجهة مع المتغير
+    // View all the users
+    public function index()
+    {
+        $users = User::all();
+        return view('users', compact('users'));
     }
 
-    
-    public function create(Request $request) {
-        
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8', 
-        ]);
+    // make a new user
+    public function store(Request $request)
+{
+    // التحقق من المدخلات
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|string|min:8|confirmed',
+    ]);
 
-        
-        $name = $request->name ;
-        $email = $request->email ;
-        $password = $request->password ;
-        
+    // إنشاء مستخدم جديد
+    User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => bcrypt($request->password),
+    ]);
 
-        DB::table('users')->insert([
-            'name' => $name,
-            'email' => $email,
-            'password' => $password,  
-        ]);
+    // إعادة التوجيه إلى قائمة المستخدمين مع رسالة نجاح
+    return redirect()->route('users.index')->with('success', 'User created successfully!');
+}
 
-        return redirect()->back();
+    //View user edit form
+    public function edit($id)
+    {
+        $user  = User::findOrFail($id);
+        $users = User::all(); // to view all the user in the table
+        return view('edit', compact('user'));
     }
 
-    
-    public function destroy($id) {
-        
-        DB::table('users')->where('id', $id)->delete();
-        return redirect()->back();
+    // Update the user data
+   // update a user data
+public function update(Request $request, $id)
+{
+    $request->validate([
+        'name'  => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,'.$id,
+        'password' => 'nullable|string|min:8',  // Validate password only if provided
+    ]);
+
+    $user = User::findOrFail($id);  //
+
+    // update the user data
+    $data = [
+        'name'  => $request->name,
+        'email' => $request->email,
+    ];
+
+    // if a password is a new
+    if ($request->filled('password')) {
+        $data['password'] = Hash::make($request->password);  //update a password
     }
 
+    $user->update($data);  // update the data
 
-    public function edit($id) {
-    
-        $user = DB::table('users')->where('id', $id)->first();
-        $users = DB::table('users')->get();
-        return view('users', compact('user', 'users'));
-    }
+    return redirect()->route('users.index')->with('success', 'The data of the user was updated');
+}
 
-    // دالة لتحديث بيانات مستخدم
-    public function update(Request $request) {
-        // التحقق من صحة المدخلات
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $request->id,
-            'password' => 'nullable|string|min:8',  // كلمة المرور اختيارية عند التحديث
-        ]);
+    // delete a user
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
 
-        $id = $request->id;
-
-        // تحضير البيانات للتحديث
-        $updateData = [
-            'name' => $request->name,
-            'email' => $request->email,
-        ];
-
-        // إذا كان هناك كلمة مرور جديدة مدخلة، نقوم بتشفيرها وتحديثها
-        if ($request->filled('password')) {
-            $updateData['password'] = Hash::make($request->password); // تشفير كلمة المرور
-        }
-
-        // تحديث المستخدم في قاعدة البيانات
-        DB::table('users')->where('id', $id)->update($updateData);
-
-        return redirect()->route('users');
+        return redirect()->route('users.index')->with('success', 'the user was deleted successfuly');
     }
 }
