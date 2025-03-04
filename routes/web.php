@@ -30,45 +30,32 @@ Route::post(uri: '/about', action: function() {
     return view(view: 'about', data: compact(var_name: 'name'));
 });
 
-Route::get(uri: 'tasks', action: [TaskController::class, 'index']);
+// routes/web.php
+Route::get('tasks', [TaskController::class, 'index'])->name('tasks');
 
+Route::post('create-task', [TaskController::class, 'create'])->name('create-task');
 
-Route::post(uri: 'create', action: [TaskController::class, 'create']);
+Route::post('delete-task/{id}', [TaskController::class, 'destroy'])->name('delete-task');
 
+// routes/web.php
+Route::get('edit-task/{id}', [TaskController::class, 'edit'])->name('edit-task');
 
-Route::post(uri: 'delete/{id}', action: [TaskController::class, 'destroy']);
-
-Route::post(uri: 'edit/{id}', action: [TaskController::class, 'edit']);
-
-
-Route::post(uri: 'update', action: [TaskController::class, 'update']);
+// routes/web.php
+Route::post('update-task', [TaskController::class, 'update'])->name('update-task');
 
 Route::get(uri: 'app', action: function() {
      return view(view: 'layouts.app');
 });
 
-// Route::get('users', [UserController::class, 'index'])->name('users');
-// Route::post('create-user', [UserController::class, 'create']);
-// Route::post('delete-user/{id}', [UserController::class, 'destroy']);
-// Route::post('edit-user/{id}', [UserController::class, 'edit']);
-// Route::post('update-user', [UserController::class, 'update']);
+Route::get(uri: 'users', action: [UserController::class, 'index']);
 
-Route::resource('users', UserController::class);
+Route::post('create-user', [UserController::class, 'create']);
 
-// View A user menu
-Route::get('/users', [UserController::class, 'index'])->name('users.index');
+Route::post(uri: 'delete/{id}', action: [UserController::class, 'destroy']);
 
-// Add a new user
-Route::post('/users', [UserController::class, 'create'])->name('users.store');
+Route::post(uri: 'edit/{id}', action: [UserController::class, 'edit']);
 
-// delete a user
-Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
-
-// Edit a user data
-Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
-
-//Update a user data
-Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+Route::post(uri: 'update', action: [UserController::class, 'update']);
 
 
 

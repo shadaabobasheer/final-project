@@ -3,6 +3,7 @@
 @section('content')
 <div class="container mt-4">
     <h1>Task List App</h1>
+
     <div class="offset-md-2 col-md-8">
         <div class="card">
             @if (isset($task))
@@ -11,15 +12,13 @@
             </div>
             <div class="card-body">
                 <!-- Update Task Form -->
-                <form action="{{url('update')}}" method="POST">
+                <form action="{{ route('update-task') }}" method="POST">
                     @csrf
-                    <input type="hidden" name="id" value="{{$task->id}}">
-                    <!-- Task Name -->
+                    <input type="hidden" name="id" value="{{ $task->id }}">
                     <div class="mb-3">
                         <label for="task-name" class="form-label">Task</label>
-                        <input type="text" name="name" id="task-name" class="form-control" value="{{$task->name}}">
+                        <input type="text" name="name" id="task-name" class="form-control" value="{{ $task->name }}">
                     </div>
-                    <!-- Update Task Button -->
                     <div>
                         <button type="submit" class="btn btn-primary">
                             <i class="fa fa-plus me-2"></i>Update Task
@@ -27,27 +26,21 @@
                     </div>
                 </form>
             </div>
-
             @else
             <div class="card-header">
                 New Task
             </div>
             <div class="card-body">
                 <!-- New Task Form -->
-                <form action="create" method="POST">
+                <form action="{{ route('create-task') }}" method="POST">
                     @csrf
-                    <!-- Task Name -->
                     <div class="mb-3">
                         <label for="task-name" class="form-label">Task</label>
-                        <input type="text" name="name" id="task-name" class="form-control" value="">
+                        <input type="text" name="name" id="task-name" class="form-control">
                     </div>
-
-                    <!-- Add Task Button -->
-                    <div>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fa fa-plus me-2"></i>Add Task
-                        </button>
-                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-plus me-2"></i>Add Task
+                    </button>
                 </form>
             </div>
             @endif
@@ -69,20 +62,24 @@
                     <tbody>
                         @foreach ($tasks as $task)
                         <tr>
-                            <td>{{$task->name}}</td>
+                            <td>{{ $task->name }}</td>
                             <td>
-                                <form action="/delete/{{$task->id}}" method="POST" class="d-inline">
+                                <!-- Delete Task -->
+                                <form action="{{ route('delete-task', ['id' => $task->id]) }}" method="POST" class="d-inline">
                                     @csrf
                                     <button type="submit" class="btn btn-danger">
                                         <i class="fa fa-trash me-2"></i>Delete
                                     </button>
                                 </form>
-                                <form action="/edit/{{$task->id}}" method="POST" class="d-inline">
+
+                                <!-- Edit Task (Form opens on click) -->
+                                <form action="{{ route('edit-task', ['id' => $task->id]) }}" method="GET" class="d-inline">
                                     @csrf
                                     <button type="submit" class="btn btn-info">
-                                        <i class="fa fa-info me-2"></i>Edit
+                                        <i class="fa fa-edit me-2"></i>Edit
                                     </button>
                                 </form>
+
                             </td>
                         </tr>
                         @endforeach
