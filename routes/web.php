@@ -58,4 +58,3 @@ Route::post(uri: 'edit/{id}', action: [UserController::class, 'edit']);
 Route::post(uri: 'update', action: [UserController::class, 'update']);
 
 
-

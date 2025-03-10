@@ -111,7 +111,7 @@
                 <main>
                     <div class="container-fluid px-4">
                         @yield(section: 'content')
-                        
+
                     </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
