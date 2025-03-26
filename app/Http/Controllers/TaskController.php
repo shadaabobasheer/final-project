@@ -16,6 +16,9 @@ class TaskController extends Controller
     }
 
     public function create(Request $request) {
+        $validated = $request->validate(rules: [
+            'name' => 'required|max:10'
+        ]);
         $task_name = $request->input('name');
        // DB::table('tasks')->insert(['name' => $task_name]);
        $task = new Task;
@@ -37,7 +40,9 @@ class TaskController extends Controller
 
 
     public function edit($id)
+
 {
+    
 
     $task = DB::table('tasks')->where('id', $id)->first();
 

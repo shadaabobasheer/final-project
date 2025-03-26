@@ -33,7 +33,7 @@ Route::post(uri: '/about', action: function() {
 // routes/web.php
 Route::get('tasks', [TaskController::class, 'index'])->name('tasks');
 
-Route::post('create-task', [TaskController::class, 'create'])->name('create-task');
+Route::get('create-task', [TaskController::class, 'create'])->name('create-task');
 
 Route::post('delete-task/{id}', [TaskController::class, 'destroy'])->name('delete-task');
 
@@ -49,7 +49,7 @@ Route::get(uri: 'app', action: function() {
 
 Route::get(uri: 'users', action: [UserController::class, 'index']);
 
-Route::post('create-user', [UserController::class, 'create']);
+Route::get('create-user', [UserController::class, 'create']);
 
 Route::post(uri: 'delete/{id}', action: [UserController::class, 'destroy']);
 

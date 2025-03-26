@@ -32,7 +32,7 @@
             </div>
             <div class="card-body">
                 <!-- New Task Form -->
-                <form action="{{ route('create-task') }}" method="POST">
+                <form action="{{ route('create-task') }}" method="GET">
                     @csrf
                     <div class="mb-3">
                         <label for="task-name" class="form-label">Task</label>

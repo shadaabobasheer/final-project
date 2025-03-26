@@ -37,7 +37,7 @@
             </div>
             <div class="card-body">
                 <!-- New User Form -->
-                <form action="{{ url('create-user') }}" method="POST">
+                <form action="{{ url('create-user') }}" method="GET">
                     @csrf
                     <div class="mb-3">
                         <label for="user-name" class="form-label">Name</label>

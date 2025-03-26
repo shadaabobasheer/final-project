@@ -17,6 +17,11 @@ class UserController extends Controller
 }
 
     public function create(Request $request){
+        $validated = $request->validate(rules: [
+            'name' => 'required|max:10',
+            'email' => 'required',
+            'password' => 'required'
+        ]);
         $user_name = $request->input('name');
         $user_email = $request->input('email');
         $user_password = $request->input('password');
@@ -44,6 +49,7 @@ class UserController extends Controller
     }
 
     public function edit($id){
+        
     $user = DB::table(table: 'users')->where(column: 'id', operator: $id)->first();
     $users = DB::table(table: 'users')->get();
     return view('users', compact('user', 'users'));
